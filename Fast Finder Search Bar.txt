@@ -1,0 +1,95 @@
+jsx
+import React, { useState, useEffect } from 'react';
+import './search-bar.css';
+
+const SearchBar = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [data] = useState(JSON_DATA); // import JSON data
+
+  useEffect(() => {
+    const filteredResults = data.filter((country) => {
+      return (
+        country.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        country.capital.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setSearchResults(filteredResults);
+  }, [searchTerm, data]);
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  return (
+    <div className="search-bar-container">
+      <input
+        type="text"
+        placeholder="Search for countries by name or capital"
+        value={searchTerm}
+        onChange={handleInputChange}
+      />
+      {searchTerm && (
+        <ul className="search-suggestions">
+          {searchResults.map((country) => (
+            <li key={country.country}>
+              <span>{country.country}</span>
+              <span>{country.capital}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default SearchBar;
+
+
+CSS (search-bar.css):
+
+
+.search-bar-container {
+  position: relative;
+  width: 50%;
+  margin: 40px auto;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 18px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.search-suggestions li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.search-suggestions li:last-child {
+  border-bottom: none;
+}
+
+.search-suggestions span {
+  font-size: 16px;
+  color: #666;
+}
+
+.search-suggestions span:first-child {
+  font-weight: bold;
+}
